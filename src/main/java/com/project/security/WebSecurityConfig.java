@@ -57,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dont authenticate this particular request
                 .authorizeRequests()
                 .antMatchers("/authenticate", "/register", "/h2-console/**",
-                        "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/actuator/**")
+                        "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/actuator/**",
+                        "/mutualfunds", "/mutualfunds/id/**", "/mutualfund/getstockweights/**", "/stocks")
                 .permitAll()
                 // Admin only endpoints
                 .antMatchers("/stocks/add", "/mutualfund/add", "/portfoliomanagers/add").hasRole("ADMIN")
