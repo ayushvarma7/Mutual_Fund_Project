@@ -138,6 +138,27 @@ curl http://localhost:8188/mutualfunds \
 
 ---
 
+
+## 🧪 Mock Data & Demo (Auto-Seeded)
+
+The application automatically seeds a realistic dataset on startup using `JavaFaker`, so you can test features immediately without manual entry.
+
+### Pre-configured Users
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | `admin@example.com` | `password` |
+| **User** | `user@example.com` | `password` |
+
+### Seeded Entities
+- **5 Portfolio Managers** with randomized profiles
+- **20 Stocks** (NASDAQ tickers) with historical price data
+- **10 Mutual Funds** with assets, NAV, and manager assignments
+- **Assets Composition** for each fund (randomized stocks and weights)
+- **10 Investors** with diverse portfolios
+- **Multiple Investments** per investor (Buy/SIP history)
+
+---
+
 ## 📚 API Reference
 
 ### 🔐 Authentication
@@ -149,10 +170,11 @@ curl http://localhost:8188/mutualfunds \
 ### 📊 Mutual Funds
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| GET | `/mutualfunds` | List all funds | User |
-| GET | `/mutualfunds/id/{id}` | Get fund details (HATEOAS) | User |
+| GET | `/mutualfunds` | List all funds | **Guest** |
+| GET | `/mutualfunds/id/{id}` | Get fund details (HATEOAS) | **Guest** |
 | POST | `/mutualfund/add` | Create a new fund | **Admin** |
-| GET | `/mutualfund/getstockweights/{id}` | Get stock composition | User |
+| GET | `/mutualfund/getstockweights/{id}` | Get stock composition | **Guest** |
+| GET | `/investor/mfs/{investorId}` | Invested funds history | User |
 
 ### 💰 Investments
 | Method | Endpoint | Description | Auth |
@@ -164,7 +186,7 @@ curl http://localhost:8188/mutualfunds \
 ### 📈 Stocks
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| GET | `/stocks` | List all stocks | User |
+| GET | `/stocks` | List all stocks | **Guest** |
 | POST | `/stocks/add` | Add a new stock | **Admin** |
 
 ---
