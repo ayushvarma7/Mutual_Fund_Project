@@ -1,146 +1,199 @@
+# Mutual Fund Management System 📈
 
-# Mutual Fund Investment Platform 📈
+A production-ready fintech backend built with **Spring Boot 2.7**, engineered for scalability, auditability, and secure asset management. This platform models a complete investment lifecycle—from dynamic NAV calculation to secure multi-role transactions.
 
-#### *A comprehensive platform to manage, track, and execute mutual fund investments*
+![Java](https://img.shields.io/badge/Java-17+-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7-green)
+![Security](https://img.shields.io/badge/Security-JWT%20%2B%20HS512-red)
+![Monitoring](https://img.shields.io/badge/Monitoring-Actuator-blue)
 
-## Overview
-
-This project offers users the ability to view mutual fund details, invest in them, track investments, and execute buy/sell transactions. With a seamless authentication process and an intuitive interface, users can effortlessly navigate their investment journey.
-
-
-
-
-##   Features
-
-* **User Authentication**: Secure login system for investors.
-
-* **Investment Tracking**: View all the mutual funds an investor has invested in with transaction history.
-
-* **Buy/Sell Transactions**: Execute buy or sell transactions with up-to-date NAV values.
-
-* **Dynamic NAV Calculation**: Calculates NAV based on stock prices and their weights in the mutual fund.
-
-* **Wallet Management**: Ensure users don't invest more than their wallet balance.# Installation Guide for Mutual_Fund_Project
-
-This guide will walk you through the steps to set up and run Mutual_Fund_Project locally using the Spring Tool Suite (STS).
-
-## Prerequisites
-
-- Java JDK (Version 8 or newer)
-- Spring Tool Suite (STS) IDE
-- Oracle Database 
-
-## Steps to Set Up and Run
-
-### 1. Clone the Repository
-
-First, you need to clone the project repository from GitHub (or wherever your source code is hosted):
-
-```bash
-  git clone https://github.com/ayushvarma7/Mutual_Fund_Project.git
-```
-
-### 2. Import the Project in STS
-
-1. Open STS.
-2. Go to `File` > `Import...` > `Existing Maven Projects`.
-3. Navigate to the directory where you cloned the repository and select the project.
-
-### 3. Configure Database
-
-1. Start your Oracle Database instance.
-2. Ensure that the database connection details in `application.properties` (or wherever you have placed the DB configuration) match your Oracle DB settings.
-3. Update the following lines in `application.properties`:
-
-```properties
-spring.datasource.url=jdbc:oracle:thin:@localhost:1521:orcl
-spring.datasource.username=YOUR_DB_USERNAME
-spring.datasource.password=YOUR_DB_PASSWORD
-```
-
-### 4. Run the Application
-
-1. In STS, right-click the project in the `Project Explorer`.
-2. Select `Run As` > `Spring Boot App`.
-
-The application should start, and you'll be able to access the available endpoints. For API details, refer to the [API Reference section](#api-reference).
-
-View the Frontend of the project at [Mutual_Fund_Project_Frontend](https://github.com/ayushvarma7/Mutual_Fund_Project_Frontend)
-
-## Troubleshooting
-
-1. **Database Connection Issues**: Ensure that your Oracle Database instance is running and that the credentials in `application.properties` are correct.
-2. **Dependency Issues**: Right-click on the project, choose `Maven` > `Update Project`. Make sure "Force Update of Snapshots/Releases" is selected.
-
-
-
-
-## 🚀 API Reference 
-
-
-### 🛡 User Authentication
-
-### Investor Controller
-- **POST** `/login`: Authenticate and login an investor.
-- **GET** `/investors`: Retrieve all investors.
-- **POST** `/`: Add a new investor.
-- **GET** `/investors/id/{investorid}`: Get information of a specific investor by investor ID.
-- **POST** `/register`: Register a new investor.
-
-### 💰 Investments
-
-### Investment Controller
-- **GET** `/investments`: Retrieve all investments.
-- **POST** `/investments/add`: Add a new investment.
-- **GET** `/investments/id/{investorid}`: Get investments by an investor ID.
-- **GET** `/investments/investmentid/{investmentId}`: Get a specific investment by investment ID.
-- **GET** `/investments/getunits/{investorId}/{fundId}`: Get total units for an investor for a specific fund.
-
-### 🌐 Mutual Funds
-
-### Mutual Fund Controller
-- **GET** `/mutualfunds`: Retrieve all mutual funds.
-- **POST** `/mutualfund/add`: Create a new mutual fund.
-- **GET** `/mutualfunds/id/{mfid}`: Get information of a specific mutual fund by its ID.
-- **GET** `/mutualfund/getstockweights/{mfid}`: Get stock composition for a specific mutual fund.
-- **GET** `/investor/mfs/{investorId}`: Get list of mutual funds invested in by a specific investor.
-
-### 🧑 Portfolio Manager
-
-### Portfolio Manager Controller
-- **GET** `/portfoliomanagers`: Retrieve all portfolio managers.
-- **POST** `/portfoliomanagers/add`: Add a new portfolio manager.
-- **GET** `/portfoliomanagers/getAllMF/{managerId}`: Get all mutual funds associated with a specific manager ID.
-
-### 💸 Investments
-
-### Stock Controller
-- **GET** `/stocks`: Retrieve all stocks.
-- **GET** `/stocks/byid`: Special route to retrieve stocks by ID (Purpose not clear from provided data).
-- **POST** `/stocks/add`: Add a new stock.
-- **GET** `stocks/id/{stockId}`: Get information of a specific stock by its ID.
-
-### 💰 Fund composition
-
-### StocksInFund Controller
-- **GET** `/stocksinfund`: Retrieve all stocks in funds.
-- **POST** `/stocksinfund/add`: Add stocks weight.
+> 📖 **[Engineering Design Deep-Dive →](DESIGN.md)** — Architectural rationale, design patterns, RBAC implementation, and performance optimizations.
 
 ---
 
+## 📋 Platform Capabilities
 
-## Tech Stack
+| Feature | Implementation | Benefit |
+|---------|----------------|---------|
+| **Secure Transactions** | JWT + RBAC | Role-based access for Investors vs Admins |
+| **Async Orchestration** | Event-Driven Architecture | Non-blocking registration & notifications |
+| **Auditing** | AOP (Aspect-Oriented) | Automatic logging without code clutter |
+| **API Discoverability** | HATEOAS (Level 3 REST) | Self-documenting hypermedia links |
+| **Observability** | Spring Actuator | Real-time health, metrics, and info |
 
+---
 
-**Backend**: Spring Boot, Java Persistence API, MVC Framework
+## 🏛️ Architecture Overview
 
-**Database**: Oracle SQL, DBeaver, SQL Plus 
+```mermaid
+graph LR
+    subgraph Client
+    UI[Frontend / Postman]
+    end
+    
+    subgraph API Gateway
+    JWT[JWT Filter]
+    Controllers[REST Controllers]
+    end
+    
+    subgraph Business Logic
+    Services[Transaction Services]
+    AOP[AOP Auditing]
+    Events[Event Publisher]
+    end
+    
+    subgraph Data Layer
+    JPA[Spring Data JPA]
+    DB[(H2 / Oracle)]
+    end
+    
+    UI --> JWT --> Controllers
+    Controllers --> Services
+    Services --> JPA --> DB
+    AOP -.-> Services
+    Services -.-> Events
+```
 
+---
 
-## Authors
+## 📁 Project Structure
 
-- [@ayushvarma7](https://www.github.com/ayushvarma7)
+```
+src/main/java/com/project/
+├── aspect/            # AOP: @LogActivity annotation & LoggingAspect
+├── controller/        # REST endpoints (HATEOAS-enabled)
+├── dto/               # Request/Response models (decoupled from entities)
+├── event/             # Event-Driven: InvestorRegisteredEvent, Listeners
+├── model/             # JPA Entities: Investor, MutualFund, Stock, Investment
+├── repository/        # Spring Data JPA interfaces
+├── security/          # JWT Filter, WebSecurityConfig, RBAC
+└── service/           # Business logic & transaction management
+```
 
-## Feedback and Contributions
+---
 
-If you encounter any issues or would like to contribute to the project, please [open an issue on GitHub](https://github.com/ayushvarma7/Mutual_Fund_Project/issues) or send a pull request.
+## 🏗️ Technical Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Core** | Java 17, Spring Boot 2.7, Spring Data JPA |
+| **Security** | Spring Security, JWT (JJWT), BCrypt |
+| **API Maturity** | Spring HATEOAS, Springdoc OpenAPI 3 |
+| **Monitoring** | Spring Boot Actuator |
+| **Database** | H2 (Dev), Oracle SQL (Production) |
+| **Testing** | JUnit 5, Mockito, MockMvc |
+
+---
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+- **JDK 17** or higher
+- **Maven 3.6+** (or use included wrapper)
+- (Optional) **Postman** for API testing
+
+### 1. Clone & Build
+```bash
+git clone https://github.com/ayushvarma7/Mutual_Fund_Project.git
+cd Mutual_Fund_Project
+
+# Build using the local Maven wrapper
+./.maven_local/bin/mvn clean compile
+```
+
+### 2. Run the Application
+```bash
+./.maven_local/bin/mvn spring-boot:run
+```
+The server starts on **port 8188**.
+
+### 3. Run Tests
+```bash
+./.maven_local/bin/mvn test
+```
+
+---
+
+## ⚡ Quick Demo (60 Seconds)
+
+**1. Register a new investor:**
+```bash
+curl -X POST http://localhost:8188/register \
+  -H "Content-Type: application/json" \
+  -d '{"firstName":"John","lastName":"Doe","email":"john@example.com","password":"secure123","contactNumber":"1234567890"}'
+```
+
+**2. Authenticate to get JWT:**
+```bash
+curl -X POST http://localhost:8188/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{"username":"john@example.com","password":"secure123"}'
+```
+
+**3. Use the JWT to access protected endpoints:**
+```bash
+curl http://localhost:8188/mutualfunds \
+  -H "Authorization: Bearer <YOUR_JWT_TOKEN>"
+```
+
+---
+
+## 📚 API Reference
+
+### 🔐 Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/register` | Register a new investor |
+| POST | `/authenticate` | Login and receive JWT |
+
+### 📊 Mutual Funds
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/mutualfunds` | List all funds | User |
+| GET | `/mutualfunds/id/{id}` | Get fund details (HATEOAS) | User |
+| POST | `/mutualfund/add` | Create a new fund | **Admin** |
+| GET | `/mutualfund/getstockweights/{id}` | Get stock composition | User |
+
+### 💰 Investments
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/investments` | List all investments | User |
+| POST | `/investments/add` | Record a new investment | User |
+| GET | `/investments/id/{investorId}` | Get investor's portfolio | User |
+
+### 📈 Stocks
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/stocks` | List all stocks | User |
+| POST | `/stocks/add` | Add a new stock | **Admin** |
+
+---
+
+## 🍱 Developer Tooling
+
+| Endpoint | Purpose |
+|----------|---------|
+| `/swagger-ui.html` | Interactive API Documentation |
+| `/v3/api-docs` | OpenAPI 3 Metadata (JSON) |
+| `/actuator/health` | Real-time System Heartbeat |
+| `/actuator/info` | Application Metadata |
+| `/h2-console` | In-memory Database Console |
+
+---
+
+## 🛠️ Design Highlights
+
+- **Statelessness**: No server-side sessions; horizontally scalable.
+- **Fail-Fast Validation**: DTOs validate input before reaching business logic.
+- **Audit Trails**: AOP intercepts every transaction for accountability.
+- **Event Decoupling**: Registration side-effects (email, logs) run asynchronously.
+
+> For a complete explanation of these design choices, see the **[DESIGN.md](DESIGN.md)**.
+
+---
+
+## 👨‍💻 Author
+
+**Ayush Varma**  
+MS Computer Science, Northeastern University  
+[GitHub](https://github.com/ayushvarma7) | [LinkedIn](https://linkedin.com/in/ayushvarma7) | [Portfolio](https://ayushvarma7.github.io)
