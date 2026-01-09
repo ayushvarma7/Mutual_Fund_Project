@@ -1,4 +1,4 @@
-package com.project;
+package com.project.model;
 
 import java.util.Date;
 
@@ -10,18 +10,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="MUTUALFUND")
+@Table(name = "MUTUALFUND")
 public class MutualFund {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "fundId", insertable = false, updatable = false)
-	int fundId ;
+	int fundId;
 	String fundName;
 	double assetsUnderManagement, currentNAV, expenseRatio, exitLoad;
 	int managerId;
 	Date inceptionDate;
-	
+
 	public MutualFund() {
 		super();
 	}
@@ -109,9 +109,5 @@ public class MutualFund {
 				+ assetsUnderManagement + ", currentNAV=" + currentNAV + ", expenseRatio=" + expenseRatio
 				+ ", exitLoad=" + exitLoad + ", managerId=" + managerId + ", inceptionDate=" + inceptionDate + "]";
 	}
-	
-	
-	
-	
-	
+
 }

@@ -1,19 +1,16 @@
-package com.project;
+package com.project.model;
 
 public class StockInfo {
-	
+
 	int stockId;
 	String stockName;
 	double closingPrice;
 	double stockWeight;
-	
-	
-	
+
 	public StockInfo() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
 
+	}
 
 	public StockInfo(int stockId, String stockName, double closingPrice, double stockWeight) {
 		super();
@@ -23,55 +20,42 @@ public class StockInfo {
 		this.stockWeight = stockWeight;
 	}
 
-
 	public int getStockId() {
 		return stockId;
 	}
-
 
 	public void setStockId(int stockId) {
 		this.stockId = stockId;
 	}
 
-
 	public String getStockName() {
 		return stockName;
 	}
-
 
 	public void setStockName(String stockName) {
 		this.stockName = stockName;
 	}
 
-
 	public double getClosingPrice() {
 		return closingPrice;
 	}
-
 
 	public void setClosingPrice(double closingPrice) {
 		this.closingPrice = closingPrice;
 	}
 
-
 	public double getStockWeight() {
 		return stockWeight;
 	}
 
-
 	public void setStockWeight(double stockWeight) {
 		this.stockWeight = stockWeight;
 	}
-
 
 	@Override
 	public String toString() {
 		return "StockInfo [stockId=" + stockId + ", stockName=" + stockName + ", closingPrice=" + closingPrice
 				+ ", stockWeight=" + stockWeight + "]";
 	}
-	
-	
-	
-	
-	
+
 }

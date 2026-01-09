@@ -1,4 +1,4 @@
-package com.project;
+package com.project.model;
 
 import java.util.Date;
 
@@ -14,35 +14,30 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-
-
 @Entity
-@Table(name="Stock")
+@Table(name = "Stock")
 public class Stock {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="stockId",insertable=false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "stockId", insertable = false)
 	int stockId;
 	String stockTicker;
 	double openingPrice, lowPrice, closingPrice, highPrice;
-	
+
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern="yyyy-MM-DD")
+	@DateTimeFormat(pattern = "yyyy-MM-DD")
 	Date dateOfRecord;
-	
-	
+
 	@PrePersist
 	protected void onCreate() {
-		dateOfRecord= new Date();
+		dateOfRecord = new Date();
 	}
-	
+
 	public Stock() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
-	
-	
 
 	public Stock(int stockID, String stockTicker, Date dateOfRecord, double openingPrice, double lowPrice,
 			double closingPrice, double highPrice) {
@@ -55,8 +50,6 @@ public class Stock {
 		this.closingPrice = closingPrice;
 		this.highPrice = highPrice;
 	}
-
-
 
 	public int getStockID() {
 		return stockId;
@@ -114,10 +107,9 @@ public class Stock {
 		this.highPrice = highPrice;
 	}
 
-//	public static getStockInfo(int stockID) {
-//		Stock st= new Stock();
-//		
-//	}
-	
-	
+	// public static getStockInfo(int stockID) {
+	// Stock st= new Stock();
+	//
+	// }
+
 }

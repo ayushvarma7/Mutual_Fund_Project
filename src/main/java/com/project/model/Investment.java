@@ -1,4 +1,4 @@
-package com.project;
+package com.project.model;
 
 import java.util.Date;
 
@@ -11,46 +11,58 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
 
 @Entity
-@Table(name="Investment")
+@Table(name = "Investment")
 public class Investment {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="investmentId", insertable=false, updatable=false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "investmentId", insertable = false, updatable = false)
 	int investmentId;
-	int investorId, fundId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "investorId")
+	private Investor investor;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fundId")
+	private MutualFund fund;
+
 	double amountInvested;
 	double units;
-	
-	
-	@Column(name="Transaction_Type")
+
+	@Column(name = "Transaction_Type")
 	String transactionType;
-	
+
 	@Temporal(TemporalType.DATE)
 	Date dateOfInvestment;
-	
+
 	@PrePersist
 	protected void onCreate() {
-		dateOfInvestment= new Date();
-	}
-	
-	public Investment() {
-		super();
-		// TODO Auto-generated constructor stub
+		dateOfInvestment = new Date();
 	}
 
-	public Investment(int investmentId, int investorId, int fundId, double amountInvested, String transactionType, double units,
+	public Investment() {
+		super();
+
+	}
+
+	public Investment(int investmentId, Investor investor, MutualFund fund, double amountInvested,
+			String transactionType,
+			double units,
 			Date dateOfInvestment) {
 		super();
 		this.investmentId = investmentId;
-		this.investorId = investorId;
-		this.fundId = fundId;
+		this.investor = investor;
+		this.fund = fund;
 		this.amountInvested = amountInvested;
 		this.transactionType = transactionType;
 		this.dateOfInvestment = dateOfInvestment;
-		this.units=units;
+		this.units = units;
 	}
 
 	public int getInvestmentId() {
@@ -61,20 +73,20 @@ public class Investment {
 		this.investmentId = investmentId;
 	}
 
-	public int getInvestorId() {
-		return investorId;
+	public Investor getInvestor() {
+		return investor;
 	}
 
-	public void setInvestorId(int investorId) {
-		this.investorId = investorId;
+	public void setInvestor(Investor investor) {
+		this.investor = investor;
 	}
 
-	public int getFundId() {
-		return fundId;
+	public MutualFund getFund() {
+		return fund;
 	}
 
-	public void setFundId(int fundId) {
-		this.fundId = fundId;
+	public void setFund(MutualFund fund) {
+		this.fund = fund;
 	}
 
 	public double getAmountInvested() {
@@ -100,7 +112,7 @@ public class Investment {
 	public void setDateOfInvestment(Date dateOfInvestment) {
 		this.dateOfInvestment = dateOfInvestment;
 	}
-	
+
 	public double getUnits() {
 		return units;
 	}
@@ -111,13 +123,9 @@ public class Investment {
 
 	@Override
 	public String toString() {
-		return "Investment [investmentId=" + investmentId + ", investorId=" + investorId + ", fundId=" + fundId
-				+ ", amountInvested=" + amountInvested + ", units=" + units + ", transactionType=" + transactionType
+		return "Investment [investmentId=" + investmentId + ", amountInvested=" + amountInvested + ", units=" + units
+				+ ", transactionType=" + transactionType
 				+ ", dateOfInvestment=" + dateOfInvestment + "]";
 	}
 
-
-	
-	
-	
 }
