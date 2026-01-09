@@ -1,0 +1,19 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Maven wrapper
+.maven_local/
+apache-maven-*.tar.gz
+
+# Agent files
+.agent/
+
+# OS files
+.DS_Store
