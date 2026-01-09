@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.project.Investment;
+import com.project.model.Investment;
 
-public interface InvestmentRepository extends CrudRepository<Investment, Number>  {
-	ArrayList<Investment>  findInvestmentsByInvestorId(int id);
-	Investment findInvestmentByInvestmentId(int id);
-	ArrayList<Investment> findByInvestorIdAndFundId(int investorId, int fundId);
-	ArrayList<Investment> findByInvestorId(Integer investorId);
+public interface InvestmentRepository extends CrudRepository<Investment, Integer> {
+	ArrayList<Investment> findByInvestorInvestorId(int investorId);
+
+	Investment findByInvestmentId(int id);
+
+	ArrayList<Investment> findByInvestorInvestorIdAndFundFundId(int investorId, int fundId);
 }

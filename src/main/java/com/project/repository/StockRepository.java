@@ -5,7 +5,7 @@
 //
 //import org.springframework.data.repository.CrudRepository;
 //
-//import com.project.Stock;
+//import com.project.model.Stock;
 //
 //public interface StockRepository extends CrudRepository<Stock, Integer> {
 //public Stock findByStockIdAndDateOfRecord(int stockid, Date dateOfRecord);
@@ -13,8 +13,6 @@
 //public ArrayList<Stock> findByDateOfRecord(String dateOfRecord);
 //}
 //
-
-
 
 package com.project.repository;
 
@@ -24,10 +22,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.project.Stock;
+import com.project.model.Stock;
 
 public interface StockRepository extends CrudRepository<Stock, Integer> {
-	
+
 	@Query("SELECT s FROM Stock s WHERE TO_CHAR(s.stockId) LIKE '%1'")
 	List<Stock> findStocksByCustomQuery();
 

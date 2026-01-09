@@ -1,12 +1,16 @@
 package com.project.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.project.Investor;
+import com.project.model.Investor;
+import com.project.aspect.LogActivity;
+import com.project.event.InvestorRegisteredEvent;
 import com.project.repository.InvestorRepository;
+import org.springframework.context.ApplicationEventPublisher;
 
 @Service
 public class InvestorService {
@@ -14,41 +18,33 @@ public class InvestorService {
 	@Autowired
 	InvestorRepository iRepository;
 
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 
-	public Investor authenticate(String email, String password) {
-		Investor investor = iRepository.findByEmail(email);
-        
-        if (investor != null && validatePassword(password, investor.getPassword())) {
-            // Validate password (e.g., hash and compare)
-            return investor;
-        }
-        return null; //Authentication failed
-    }
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 
-    	private boolean validatePassword(String inputPassword, String storedPasswordHash) {
-        // Implement password validation logic here (hashing, comparison, etc.)
-        return inputPassword.equals(storedPasswordHash);
-    }
-    	
-	public ArrayList<Investor> getAllInvestors(){
-
-		return (ArrayList<Investor>) iRepository.findAll();
+	public List<Investor> getAllInvestors() {
+		return (List<Investor>) iRepository.findAll();
 	}
 
+	@LogActivity("Investor Registration")
 	public String addInvestor(Investor newInvestor) {
+		newInvestor.setPassword(bcryptEncoder.encode(newInvestor.getPassword()));
 		iRepository.save(newInvestor);
-		return "Successfully inserted a new investor";
+
+		// Publish registration event for decoupled side-effects
+		eventPublisher.publishEvent(new InvestorRegisteredEvent(this, newInvestor));
+
+		return "Successfully registered the investor!";
 	}
-	
-	
+
 	public boolean emailExists(String email) {
-        return iRepository.findByEmail(email) != null;
-    }
-
-	
-	public Investor getInvestorInfo(int investorid) {
-		return iRepository.findOne(investorid);
+		return iRepository.findByEmail(email) != null;
 	}
 
+	public Investor getInvestorInfo(int investorid) {
+		return iRepository.findById(investorid).orElse(null);
+	}
 
 }

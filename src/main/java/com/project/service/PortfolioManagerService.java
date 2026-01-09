@@ -1,12 +1,12 @@
 package com.project.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.MutualFund;
-import com.project.PortfolioManager;
+import com.project.model.MutualFund;
+import com.project.model.PortfolioManager;
 import com.project.repository.MutualFundRepository;
 import com.project.repository.PortfolioManagerRepository;
 
@@ -17,30 +17,19 @@ public class PortfolioManagerService {
 	PortfolioManagerRepository pmRepository;
 	@Autowired
 	MutualFundRepository mfRepository;
-	
+
 	public String addPortfolioManager(PortfolioManager pm) {
-		
 		pmRepository.save(pm);
 		return "Successfully inserted";
 	}
-	
-	public ArrayList<PortfolioManager> getAllPortfolioManagers(){
-		
+
+	public List<PortfolioManager> getAllPortfolioManagers() {
 		System.out.println("inside the service");
-		return (ArrayList<PortfolioManager>) pmRepository.findAll();
+		return (List<PortfolioManager>) pmRepository.findAll();
 	}
 
-	public ArrayList<MutualFund> getAllMutualFunds(int managerId) {
-		
-		ArrayList<MutualFund> allMutualFundsByManager = new ArrayList<MutualFund>();
-			
-			for(MutualFund mf : mfRepository.findAll()) {
-				if(mf.getManagerId()==managerId) {
-					allMutualFundsByManager.add(mf);
-				}
-			}
-			return allMutualFundsByManager;
-		
-	}	
-	
+	public List<MutualFund> getAllMutualFunds(int managerId) {
+		return mfRepository.findByManagerId(managerId);
+	}
+
 }
