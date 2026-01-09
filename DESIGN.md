@@ -281,7 +281,7 @@ flowchart TD
     J -- No --> C
     J -- Yes --> I
     I --> K[Controller Method]
-    K --> L{@PreAuthorize Check?}
+    K --> L{"@PreAuthorize Check?"}
     L -- Fails --> H
     L -- Passes --> M[Execute Business Logic]
 ```
